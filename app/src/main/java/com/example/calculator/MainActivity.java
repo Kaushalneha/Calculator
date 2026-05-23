@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView result;
+    TextView result, tvExpression;
     String input = "";
     double num1, num2;
     String operator = "";
@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         result = findViewById(R.id.result);
+        tvExpression = findViewById(R.id.tvExpression);
 
         int[] nums = {
                 R.id.b0, R.id.b1, R.id.b2, R.id.b3, R.id.b4, R.id.b5, R.id.b6, R.id.b7, R.id.b8, R.id.b9
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
             b.setOnClickListener(v -> {
                 input += b.getText().toString();
                 result.setText(input);
+                updateExpression();
             });
         }
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             if (!input.contains(".")) {
                 input += ".";
                 result.setText(input);
+                updateExpression();
             }
         });
 
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             num2 = 0;
             operator = "";
             result.setText("0");
+            tvExpression.setText("");
         });
 
         findViewById(R.id.badd).setOnClickListener(v -> setOperator("+"));
@@ -54,17 +58,27 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bequal).setOnClickListener(v -> calculate());
     }
 
+    private void updateExpression() {
+        if (operator.isEmpty()) {
+            tvExpression.setText(input);
+        } else {
+            tvExpression.setText(num1 + " " + operator + " " + input);
+        }
+    }
+
     private void setOperator(String op) {
         if (!input.isEmpty()) {
             num1 = Double.parseDouble(input);
             operator = op;
             input = "";
+            tvExpression.setText(num1 + " " + operator);
         }
     }
 
     private void calculate() {
         if (!input.isEmpty() && !operator.isEmpty()) {
             num2 = Double.parseDouble(input);
+            tvExpression.setText(num1 + " " + operator + " " + num2 + " =");
             double ans = 0;
             switch (operator) {
                 case "+":
